@@ -29,6 +29,8 @@ dependencies {
 	implementation group: 'org.mapstruct', name: 'mapstruct', version: '1.5.3.Final'
 	annotationProcessor group: 'org.mapstruct', name: 'mapstruct-processor', version: '1.5.3.Final'
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
+	implementation group: 'joda-time', name: 'joda-time', version: '2.12.5'
+
 }
 
 tasks.named('test') {

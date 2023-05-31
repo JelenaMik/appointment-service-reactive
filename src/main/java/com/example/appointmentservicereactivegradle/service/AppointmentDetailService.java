@@ -6,4 +6,8 @@ import reactor.core.publisher.Mono;
 @Service
 public interface AppointmentDetailService {
     Mono<AppointmentDetailDto> createAppointmentDetails(String appointmentId);
+
+    Mono<Void> deleteByAppointmentId(String appointmentId);
+
+    Mono<AppointmentDetailDto> changeStatusToFinished(String appointmentId);
 }

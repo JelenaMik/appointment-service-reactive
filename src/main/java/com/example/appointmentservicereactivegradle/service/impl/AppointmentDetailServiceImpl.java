@@ -3,6 +3,7 @@ package com.example.appointmentservicereactivegradle.service.impl;
 import com.example.appointmentservicereactivegradle.domain.AppointmentDetails;
 import com.example.appointmentservicereactivegradle.dto.AppointmentDetailDto;
 import com.example.appointmentservicereactivegradle.enums.AppointmentStatus;
+import com.example.appointmentservicereactivegradle.exception.AppointmentDetailNotFoundException;
 import com.example.appointmentservicereactivegradle.mapper.AppointmentDetailMapper;
 import com.example.appointmentservicereactivegradle.repository.AppointmentDetailRepository;
 import com.example.appointmentservicereactivegradle.repository.AppointmentRepository;
@@ -32,4 +33,27 @@ public class AppointmentDetailServiceImpl implements AppointmentDetailService {
                 .map(appointmentDetailMapper::entityToDto);
 
     }
+
+    @Override
+    public Mono<Void> deleteByAppointmentId(String appointmentId) {
+         String id = appointmentDetailRepository.findByAppointmentId(appointmentId)
+                 .map(AppointmentDetails::getAppointmentDetailId)
+                 .toString();
+
+         return Mono.from(appointmentDetailRepository.deleteById(id));
+    }
+
+    @Override
+    public Mono<AppointmentDetailDto> changeStatusToFinished(String appointmentId){
+        return appointmentDetailRepository.findByAppointmentId(appointmentId)
+                .switchIfEmpty(Mono.error(new AppointmentDetailNotFoundException()))
+                .flatMap(appointmentDetails -> {
+                    appointmentDetails.setStatus(AppointmentStatus.FINISHED);
+                    return Mono.just(appointmentDetails).log();
+                })
+                .flatMap(appointmentDetailRepository::save)
+                .map(appointmentDetailMapper::entityToDto);
+    }
+
+
 }

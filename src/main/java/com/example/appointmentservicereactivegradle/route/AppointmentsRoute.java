@@ -18,7 +18,12 @@ public class AppointmentsRoute {
                                 builder
                                         .POST("", handler::createAppointment)
                                         .GET("", handler::getAllAppointments)
+                                        .GET("/{id}", handler::getAppointment)
                                         .PUT("/book", handler::bookAppointment)
+                                        .PUT("/change-type", handler::changeAppointmentType)
+                                        .DELETE("/{id}", handler::cancelAppointmentFromProviderSide)
+                                        .PUT("/{id}", handler::cancelAppointmentFromClientSide)
+                                        .GET("/all/{userId}", handler::getAppointmentsOfCurrentWeek)
                         ).build();
     }
 }
